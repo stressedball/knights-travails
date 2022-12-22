@@ -1,64 +1,33 @@
-1/ what is the objective?
-
-    Make an algorithm that finds the shortest path from a point A [x, y] to a point B [x, y]
-    The moving object can move with the same behavior as a chess' knight, which can move as follows:
-        Given a point A[0, 0] - a starting point - :
-        Knight can move such as :
-            Row move : -1 | -2 | -2 | -1 |  1 |  2 | 2 | 1
-            Col move :  2 |  1 | -1 | -2 | -2 | -1 | 1 | 2
-        So the knight can choose between 8 moves.
-
-    In other terms we need to find the combination of unknown size to get the knight from the starting point to the target point.
+Make use of BDS to get the shortest path.
 
 
-2/ how should i go about it?
+Fun story :
 
-    What are the available informations?
-    We have the path : ie the starting point and the target point.
-    We know what moves are available for the object we're manipulating.
+How should one tackle the problem?
 
-    The algo needs to deconstruct the path by respecting the moves available.
+First days of working on project, I constantly was thinking about making a tree full of nodes of possible moves.
+
+The idea behind was to make all possible full traversals of chessboards while respecting the preceding traversed tiles.
+
+In pseudo code :
+function buildTree([x, y], visited = []) 
+    if (x > 7 || y > 7 || x < 0 || y < 0) return null;
+    if (x || y has been visited) return null;
+
+    make a new node;
+    visited array to be updated by new coordinates;
+    
+    for (every move the knight can make)
+        calculate x + move.x, y + move.y
+        buildTree(calculatedX, calculatedY, visited)
+        node.append(return of buildTree) // null in the end
+    
+    visited.pop() before returning from the stack 
+    // we're going one node back so it shouldn't be visited
+    return node
+
+After a while, and many breakpoints, I realized I couldn't build a 8^64 tree...
 
 
-
-3/ how many parts / steps are needed ?
-
-    So far I'm with a blank page.
-
-    I need the constants : starting point and target point.
-    I definitely need the current coordinates, so currentCoord should be a good name.
-
-    How should the moves properties be implemented?
-
-    Recursion?
-        Base : if current coordinates === target point => return
-        As long as current coordinates !== from target point repeat
-
-    It is clear that we need to retain the values for paths :
-
-        Let's imagine a starting point and a target point.
-        [0, 0] and [3, 3]
-
-        The algorithm needs to evaluate all the possible paths and return the shortest one.
-
-        In no particular order, let's start from the combination [-1, 2]
-        We can see that from the starting point [0, 0], this leads to [-1, 2] which doesn't respect the boundaries [0, 0] [7, 7]
-        So first of all we can set boundaries :
-            if (calculated X || calculated Y) < 0 => path is not exploitable.
-            if (calculated X || calculated Y) > 63 => path is not exploitable
-
-        For easier readability, let's look again at the knight's possible moves: 
-            Row move : -1 | -2 | -2 | -1 |  1 |  2 | 2 | 1
-            Col move :  2 |  1 | -1 | -2 | -2 | -1 | 1 | 2
-
-        When starting from [0, 0], all moves with a negative value can be ignored
-
-        So we leave the algo with only 2 choices : [2, 1] && [1, 2]
-
-        Now, how should the algo take over?
-
-        We can queue these 2 possible moves by storing them in an array.
-
-        We then go through the array returning the future coordinates and validate them or not.
 
 

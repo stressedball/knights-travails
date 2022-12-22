@@ -2,8 +2,8 @@
 // we store all the possible moves the knight can make
 const moves = [[-1, 2], [-2, 1], [-2, -1], [-1, -2],
                 [1, -2], [2, -1], [2, 1], [1, 2]];
-const startPoint = [0, 0]; // start with an example
-const target = [6, 3]; // first target example
+const startPoint = [18, 0]; // start with an example
+const target = [0, 7]; // first target example
 class Queue {
     constructor() {
         this.queue = [];
@@ -30,6 +30,12 @@ class Queue {
     }
 }
 function knightMoves(start, target) {
+    if (start[0] > 7 || start[1] > 7 
+        || start[0] < 0 || start[1] < 0
+        || target[0] > 7 || target[1] > 7 
+        || target[0] < 0 || target[1] < 0) {
+        return console.log('Please try again. \nMax value : 7 \nMin value : 0');
+    }
     let path = findShortestPath(start, target);
     for (let el of path) {
         console.log(el)
